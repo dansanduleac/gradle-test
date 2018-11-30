@@ -2,24 +2,30 @@ repositories {
     jcenter()
 }
 
-configurations {
-  foo
-}
-
-dependencies {
-    components.all { ComponentMetadataDetails details ->
-        if (details.id.group.startsWith("com.fasterxml.jackson.")) {
-            println "Got component: $details"
-            details.belongsTo "com.fasterxml.jackson:platform:${details.id.version}"
-        }
-    }
-}
-
-dependencies {
-  constraints {
-      foo platform("com.fasterxml.jackson:platform:2.9.5")
+allprojects {
+  configurations {
+    foo
   }
 
-  foo 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
-  foo 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0'
+  dependencies {
+      components.all { ComponentMetadataDetails details ->
+          if (details.id.group.startsWith("com.fasterxml.jackson.")) {
+              println "Got component: $details"
+              details.belongsTo "com.fasterxml.jackson:platform:${details.id.version}"
+          }
+      }
+  }
+
+  dependencies {
+    constraints {
+        foo platform("com.fasterxml.jackson:platform:2.9.5")
+    }
+  }
+}
+
+project("first") {
+  dependencies {
+    foo 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
+    foo 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0'
+  }
 }
