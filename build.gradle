@@ -2,36 +2,25 @@ repositories {
     jcenter()
 }
 
-allprojects {
-  configurations {
-    foo
-  }
-
-  dependencies {
-      components.all { ComponentMetadataDetails details ->
-          if (details.id.group.startsWith("com.fasterxml.jackson.")) {
-              println "Got component: $details"
-              details.belongsTo "com.fasterxml.jackson:platform:${details.id.version}"
-          }
-      }
-  }
-
-  dependencies {
-    constraints {
-        foo platform("com.fasterxml.jackson:platform:2.9.5")
+dependencies {
+    components.all { ComponentMetadataDetails details ->
+        def platform = "${details.id.group}:_:${details.id.version}"
+        println "Got component: $details -> assigning to platform $platform"
+        details.belongsTo platform
     }
+}
+
+configurations {
+  foo
+}
+
+dependencies {
+  constraints {
+      foo platform("com.fasterxml.jackson.core:_:2.9.5")
   }
 }
 
-project("first") {
-  dependencies {
-    foo 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
-    foo 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0'
-  }
-}
-
-project("second") {
-  dependencies {
-    foo 'org.slf4j:slf4j-api:1.7.23'
-  }
+dependencies {
+  // This module has no dependencies
+  foo 'com.fasterxml.jackson.core:jackson-annotations:2.9.3'
 }
