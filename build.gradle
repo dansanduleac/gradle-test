@@ -22,5 +22,5 @@ dependencies {
 
 dependencies {
   // This module has no dependencies
-  foo 'com.fasterxml.jackson.core:jackson-annotations:2.9.3'
+  foo 'com.fasterxml.jackson.core:jackson-annotations'
 }
