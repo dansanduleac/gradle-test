@@ -2,6 +2,9 @@ repositories {
     jcenter()
 }
 
+apply plugin: 'maven-publish'
+apply plugin: 'java'
+
 dependencies {
     components.all { ComponentMetadataDetails details ->
         def platform = "${details.id.group}:_:${details.id.version}"
@@ -10,17 +13,21 @@ dependencies {
     }
 }
 
-configurations {
-  foo
-}
 
 dependencies {
   constraints {
-      foo platform("com.fasterxml.jackson.core:_:2.9.5")
+    compile platform("com.fasterxml.jackson.core:_:2.9.5")
   }
 }
 
 dependencies {
-  // This module has no dependencies
-  foo 'com.fasterxml.jackson.core:jackson-annotations'
+  compile 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
+}
+
+publishing {
+  publications {
+    foo(MavenPublication) {
+      from components.java
+    }
+  }
 }
