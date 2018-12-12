@@ -31,3 +31,12 @@ publishing {
     }
   }
 }
+
+task foo {
+    doLast {
+        configurations.runtimeClasspath.incoming.resolutionResult.allComponents {
+            println "Got component: $it"
+        }
+    }
+}
+
