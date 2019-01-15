@@ -3,25 +3,13 @@ repositories {
 }
 
 apply plugin: 'maven-publish'
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 dependencies {
-    components.all { ComponentMetadataDetails details ->
-        def platform = "${details.id.group}:_:${details.id.version}"
-        println "Got component: $details -> assigning to platform $platform"
-        details.belongsTo platform
-    }
-}
-
-
-dependencies {
+  compile platform("org.apache.spark:spark-dist_2.11-hadoop-palantir-bom")
   constraints {
-    compile platform("com.fasterxml.jackson.core:_:2.9.5")
+    compile "org.apache.spark:spark-dist_2.11-hadoop-palantir-bom:2.5.0-palantir.7"
   }
-}
-
-dependencies {
-  compile 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
 }
 
 publishing {
@@ -31,12 +19,3 @@ publishing {
     }
   }
 }
-
-task foo {
-    doLast {
-        configurations.runtimeClasspath.incoming.resolutionResult.allComponents {
-            println "Got component: $it"
-        }
-    }
-}
-
