@@ -1,5 +1,5 @@
 repositories {
-    jcenter()
+    maven { url 'https://dl.bintray.com/palantir/releases' }
 }
 
 apply plugin: 'maven-publish'
@@ -17,5 +17,11 @@ publishing {
     foo(MavenPublication) {
       from components.java
     }
+  }
+}
+
+task foo {
+  doLast {
+    configurations.compile.resolve()
   }
 }
