@@ -1,27 +1,12 @@
-repositories {
-    maven { url 'https://dl.bintray.com/palantir/releases' }
+configurations {
+  foo
 }
 
-apply plugin: 'maven-publish'
-apply plugin: 'java-library'
-
-dependencies {
-  compile platform("org.apache.spark:spark-dist_2.11-hadoop-palantir-bom")
-  constraints {
-    compile "org.apache.spark:spark-dist_2.11-hadoop-palantir-bom:2.5.0-palantir.7"
-  }
-}
-
-publishing {
-  publications {
-    foo(MavenPublication) {
-      from components.java
-    }
-  }
-}
+def detached = configurations.detachedConfiguration()
+detached.dependencies.add(dependencies.project(path: project.path, configuration: 'foo'))
 
 task foo {
   doLast {
-    configurations.compile.resolve()
+    detached.resolve()
   }
 }
