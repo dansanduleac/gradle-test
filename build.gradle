@@ -1,12 +1,14 @@
-configurations {
-  foo
-}
-
-def detached = configurations.detachedConfiguration()
-detached.dependencies.add(dependencies.project(path: project.path, configuration: 'foo'))
-
-task foo {
-  doLast {
-    detached.resolve()
+configurations.configureEach {
+  println "configureEach: $it"
+  if (it.name == 'foo') {
+    assert !it.canBeResolved
   }
 }
+
+configurations.register('foo') {
+  canBeResolved = false
+  println 'Register action'
+}
+
+// Realize the configuration
+configurations.foo
